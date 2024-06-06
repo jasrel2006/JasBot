@@ -1,34 +1,66 @@
 const axios = require('axios');
+
 const fs = require('fs');
 
-module.exports.config = {
-    name: "teach",
-    version: "1.0.0",
-    hasPermission: 0,
-    credits: "Jonell Magallanes",
-    description: "Teaching the simini command",
-    usePrefix: false,
-    commandCategory: "Fun",
-    usages: "teach <message> | <response>",
-    cooldowns: 10,
-};
 
-module.exports.run = async ({ api, event, args }) => {
+module.exports = {
+
+  config: {
+
+    name: "teach",
+
+    version: "1.0.1",
+
+    author: "Kaizenji",
+
+    countDown: 5,
+
+    role: 0,
+
+    shortDescription: "Teach Simsimi",
+
+    longDescription: { en: "teach {message} => {response}"},
+
+    category: "fun",
+
+    guide: "{p} teach message => response",
+
+  },
+
+
+onStart: async function ({ api, event, args, reply }) {
+
     const content = args.join(" ");
-    const [ask, ans] = content.split("|").map(item => item.trim());
+
+    const [ask, ans] = content.split("=>").map(item => item.trim());
+
 
     // Checking arguments
-    if (!ask || !ans) return api.sendMessage('Missing query!', event.threadID);
 
-    const url = `https://sim-api.nakelaqe.repl.co/teach?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}`;
+    if (!ask || !ans) return api.sendMessage('𝖬𝗂𝗌𝗌𝗂𝗇𝗀 𝗊𝗎𝖾𝗋𝗒!\n𝖾𝗑𝖺𝗆𝗉𝗅𝖾: 𝗍𝖾𝖺𝖼𝗁 Jasrel => pogi', event.threadID);
+
+
+    const url = `https://sim-server-0xx.onrender.com/teach?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}`;
+
 
     try {
+
         const response = await axios.get(url);
+
         if (response.data) {
-            api.sendMessage(`successfully teached!\n\nYour Ask: ${ask}\nBot response: ${ans}`, event.threadID);
+
+            api.sendMessage(`𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗧𝗲𝗮𝗰𝗵𝗲𝗱!🥳\n\n𝗬𝗼𝘂𝗿 𝗮𝘀𝗸: ${ask}\n𝗕𝗼𝘁 𝗿𝗲𝘀𝗽𝗼𝗻𝘀𝗲: ${ans}`, event.threadID);
+
         } 
+
     } catch(err) {
+
         api.sendMessage('Error while teaching', event.threadID);
+
         console.log(err);
-    }
+
+	 }
+
+	 }
+
 };
