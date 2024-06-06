@@ -1,29 +1,39 @@
-const axios = require("axios");
-
 module.exports.config = {
-  name: "sim",
-  version: "1",
-  hasPermission: 0,
-  credits: "Jonell Magallanes",
-  description: "Chat with Simini",
-usePrefix: false,
-  usages: "sim [yor message]",
-  commandCategory: "Fun",
-  cooldowns: 10
+    name: "sim",
+    version: "1.0.0",
+    role: 0,
+    aliases: ["Sim"],
+    credits: "cliff",//api by mark
+    description: "Talk to sim",
+    cooldown: 0,
+    hasPrefix: false
 };
 
-module.exports.run = async ({ api, event, args }) => {
-  try {
-    let message = args.join(" ");
-    if (!message) {
-      return api.sendMessage(`📝  | Please put message`, event.threadID, event.messageID);
+module.exports .run = async function({ api, event, args }) {
+    const axios = require("axios");
+    let { messageID, threadID, senderID, body } = event;
+    let tid = threadID,
+        mid = messageID;
+    const content = encodeURIComponent(args.join(" "));
+    if (!args[0]) return api.sendMessage("Please type a message...", tid, mid);
+    try {
+        const res = await axios.get(`https://sim-api-wdew.onrender.com/sim?q=${content}`);
+        const respond = res.data.response;
+        if (res.data.error) {
+            api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
+                if (error) {
+                    console.error(error);
+                }
+            }, mid);
+        } else {
+            api.sendMessage(respond, tid, (error, info) => {
+                if (error) {
+                    console.error(error);
+                }
+            }, mid);
+        }
+    } catch (error) {
+        console.error(error);
+        api.sendMessage("An error occurred while fetching the data.", tid, mid);
     }
-
-    const response = await axios.get(`https://sim-api.nakelaqe.repl.co/sim?ask=${message}`);
-    const respond = response.data.respond;
-    api.sendMessage(respond, event.threadID, event.messageID);
-  } catch (error) {
-    console.error("An error occurred:", error);
-    api.sendMessage("Oops! Something went wrong.", event.threadID, event.messageID);
-  }
 };
