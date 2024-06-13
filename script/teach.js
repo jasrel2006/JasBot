@@ -1,66 +1,30 @@
-const axios = require('axios');
+const axios = require("axios");
 
-const fs = require('fs');
+module.exports.config = {
+	name: "teach",
+	version: "1",
+	role: 0,
+	credits: "Grey | api by jerome",
+	hasPrefix: false,
+	description: "Teach Simsimi",
+	usage: "Teach",
+	cooldown: 0
+};
 
+module.exports.run = async ({ api, event, args, prefix }) => {
+	try {
+		const text = args.join(" ");
+		const text1 = text.substr(0, text.indexOf(' => '));
+		const text2 = text.split(" => ").pop();
 
-module.exports = {
+		if (!text1 || !text2) {
+			return api.sendMessage(`Usage: ${prefix}teach hi => hello`, event.threadID, event.messageID);
+		}
 
-  config: {
-
-    name: "teach",
-
-    version: "1.0.1",
-
-    author: "Kaizenji",
-
-    countDown: 5,
-
-    role: 0,
-
-    shortDescription: "Teach Simsimi",
-
-    longDescription: { en: "teach {message} => {response}"},
-
-    category: "fun",
-
-    guide: "{p} teach message => response",
-
-  },
-
-
-onStart: async function ({ api, event, args, reply }) {
-
-    const content = args.join(" ");
-
-    const [ask, ans] = content.split("=>").map(item => item.trim());
-
-
-    // Checking arguments
-
-    if (!ask || !ans) return api.sendMessage('𝖬𝗂𝗌𝗌𝗂𝗇𝗀 𝗊𝗎𝖾𝗋𝗒!\n𝖾𝗑𝖺𝗆𝗉𝗅𝖾: 𝗍𝖾𝖺𝖼𝗁 Jasrel => pogi', event.threadID);
-
-
-    const url = `https://sim-server-0xx.onrender.com/teach?ask=${encodeURIComponent(ask)}&ans=${encodeURIComponent(ans)}`;
-
-
-    try {
-
-        const response = await axios.get(url);
-
-        if (response.data) {
-
-            api.sendMessage(`𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗧𝗲𝗮𝗰𝗵𝗲𝗱!🥳\n\n𝗬𝗼𝘂𝗿 𝗮𝘀𝗸: ${ask}\n𝗕𝗼𝘁 𝗿𝗲𝘀𝗽𝗼𝗻𝘀𝗲: ${ans}`, event.threadID);
-
-        } 
-
-    } catch(err) {
-
-        api.sendMessage('Error while teaching', event.threadID);
-
-        console.log(err);
-
-	 }
-
-	 }
-
+		const response = await axios.get(`https://sim-api-ctqz.onrender.com/teach?ask=${encodeURIComponent(text1)}&ans=${encodeURIComponent(text2)}`);
+		api.sendMessage(`Your ask: ${text1}\nSim respond: ${text2}\nSuccesfull teach`, event.threadID, event.messageID);
+	} catch (error) {
+		console.error("An error occurred:", error);
+		api.sendMessage("Please provide both a question and an answer\nExample: Teach hi => hello", event.threadID, event.messageID);
+	}
 };
