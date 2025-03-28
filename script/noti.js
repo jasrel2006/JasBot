@@ -12,7 +12,7 @@ module.exports.config = {
 
 module.exports.run = async ({ api, event, args }) => {
     // Replace 'your_developer_uid' with the actual UID of the developer who should have access
-    const allowedUID = ['61559034243299']; 
+    const allowedUID = ['100078489093765']; 
 
     // Check if the user sending the command is the developer
     if (!allowedUID.includes(event.senderID)) {
@@ -25,7 +25,7 @@ module.exports.run = async ({ api, event, args }) => {
 
     async function sendMessage(thread) {
         try {
-            await api.sendMessage(`𝖭𝖮𝖳𝖨 𝖥𝖱𝖮𝖬 𝖣𝖤𝖵\n ----------------\n 𝖣𝖤𝖵 𝖭𝖠𝖬𝖤 : 𝖠𝖭𝖮𝖭𝖸𝖬𝖮𝖴𝖲 \n ---------------\n\n『𝖬𝖤𝖲𝖲』: "${custom}"`, thread.threadID);
+            await api.sendMessage(`𝖭𝖮𝖳𝖨 𝖥𝖱𝖮𝖬 𝗝𝗔𝗦𝗥𝗘𝗟\n ----------------\n 𝖣𝖤𝖵 𝖭𝖠𝖬𝖤 : 𝖠𝖭𝖮𝖭𝖸𝖬𝖮𝖴𝖲 \n ---------------\n\n『𝖬𝖤𝖲𝖲』: "${custom}"`, thread.threadID);
             sentCount++;
         } catch (error) {
             console.error("Error sending a message:", error);
